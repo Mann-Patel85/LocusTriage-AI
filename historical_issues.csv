@@ -1,0 +1,31 @@
+Issue_ID,Latitude,Longitude,Category,Urgency_Score,Description,Status,Upvotes
+ISSUE-E9D2B1,23.028134882855568,72.58698591251307,Pothole,6,Mock citizen report indicating a pothole at this location.,Open,21
+ISSUE-7491AD,23.031385406266473,72.5920653110639,Water Leak,5,Mock citizen report indicating a water leak at this location.,Open,15
+ISSUE-5F056E,22.98744915396456,72.62673650000927,Open Manhole,9,Mock citizen report indicating a open manhole at this location.,Open,23
+ISSUE-1F26E8,22.98787473894392,72.60447613032086,Fallen Tree,10,Mock citizen report indicating a fallen tree at this location.,Resolved,40
+ISSUE-5779AF,23.00297603502348,72.55286015395833,Water Leak,6,Mock citizen report indicating a water leak at this location.,Open,34
+ISSUE-6B9197,23.018081645398073,72.6308424041733,Fallen Tree,7,Mock citizen report indicating a fallen tree at this location.,Open,19
+ISSUE-1B4F57,23.012852853883107,72.59449421855632,Garbage Dump,5,Mock citizen report indicating a garbage dump at this location.,Resolved,44
+ISSUE-5577F9,23.030822386599702,72.61580053305468,Open Manhole,9,Mock citizen report indicating a open manhole at this location.,Open,33
+ISSUE-5D5065,23.040422846250202,72.60124518209138,Fallen Tree,10,Mock citizen report indicating a fallen tree at this location.,Resolved,7
+ISSUE-7C2661,23.029207517439794,72.55657816968534,Garbage Dump,2,Mock citizen report indicating a garbage dump at this location.,Resolved,38
+ISSUE-4E8FB1,23.05229066425713,72.60422138635619,Pothole,5,Mock citizen report indicating a pothole at this location.,Open,13
+ISSUE-9AF0AD,23.005497801615245,72.58751532657352,Pothole,6,Mock citizen report indicating a pothole at this location.,Open,31
+ISSUE-B38394,23.042878767600808,72.56242377866597,Garbage Dump,2,Mock citizen report indicating a garbage dump at this location.,Open,23
+ISSUE-0B7C58,23.01464884298865,72.5439726649036,Broken Streetlight,4,Mock citizen report indicating a broken streetlight at this location.,Resolved,33
+ISSUE-82611A,22.999678977749713,72.63865363103952,Water Leak,5,Mock citizen report indicating a water leak at this location.,Resolved,27
+ISSUE-71702C,23.070146268519483,72.5595565130242,Fallen Tree,8,Mock citizen report indicating a fallen tree at this location.,Open,41
+ISSUE-66E8D8,23.013081775784393,72.55729470612708,Broken Streetlight,3,Mock citizen report indicating a broken streetlight at this location.,Open,22
+ISSUE-A695E9,22.983648813338476,72.53878040869024,Broken Streetlight,2,Mock citizen report indicating a broken streetlight at this location.,Open,26
+ISSUE-48844C,22.984458894418776,72.58881021857383,Pothole,4,Mock citizen report indicating a pothole at this location.,Resolved,24
+ISSUE-72E201,23.001367068653927,72.53732173201739,Water Leak,7,Mock citizen report indicating a water leak at this location.,Open,3
+ISSUE-534121,23.04555760365019,72.56967882499463,Water Leak,8,Mock citizen report indicating a water leak at this location.,Open,21
+ISSUE-33928C,23.0270532684501,72.63531741292596,Garbage Dump,4,Mock citizen report indicating a garbage dump at this location.,Resolved,10
+ISSUE-169CF6,23.00275031751638,72.59873675642173,Pothole,5,Mock citizen report indicating a pothole at this location.,Open,33
+ISSUE-3AA858,23.066443015740468,72.62515377194684,Pothole,4,Mock citizen report indicating a pothole at this location.,Open,6
+ISSUE-7B22C4,23.053601616399618,72.56964707848462,Pothole,5,Mock citizen report indicating a pothole at this location.,Open,28
+ISSUE-DC2263,22.989567931035342,72.63738901831388,Garbage Dump,3,Mock citizen report indicating a garbage dump at this location.,Open,19
+ISSUE-A1DD57,23.06450403962796,72.53831202700027,Fallen Tree,8,Mock citizen report indicating a fallen tree at this location.,Open,4
+ISSUE-8363BC,22.98131718434153,72.5852658696539,Garbage Dump,3,Mock citizen report indicating a garbage dump at this location.,Open,3
+ISSUE-6810AC,23.013885223636198,72.5792866051804,Pothole,6,Mock citizen report indicating a pothole at this location.,Open,16
+ISSUE-5951F5,22.98659624212347,72.60987302100737,Garbage Dump,3,Mock citizen report indicating a garbage dump at this location.,Open,15

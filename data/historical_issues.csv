@@ -1,0 +1,31 @@
+Issue_ID,Latitude,Longitude,Category,Urgency_Score,Description,Status,Upvotes
+ISSUE-A17701,23.010284378228224,72.59743293336872,Fallen Tree,7,Mock citizen report indicating a fallen tree at this location.,Open,30
+ISSUE-02B3F3,23.033910272761485,72.6047343177244,Broken Streetlight,4,Mock citizen report indicating a broken streetlight at this location.,Open,41
+ISSUE-E94785,22.975864804195577,72.55914595286852,Fallen Tree,7,Mock citizen report indicating a fallen tree at this location.,Open,10
+ISSUE-E03079,23.056499256277764,72.62599031944369,Pothole,7,Mock citizen report indicating a pothole at this location.,Resolved,8
+ISSUE-942D91,23.001035822314613,72.53549053270882,Fallen Tree,9,Mock citizen report indicating a fallen tree at this location.,Open,13
+ISSUE-F59B72,22.994714314740804,72.53662241288083,Fallen Tree,7,Mock citizen report indicating a fallen tree at this location.,Open,12
+ISSUE-DB435A,23.06991078571166,72.52363756797149,Garbage Dump,5,Mock citizen report indicating a garbage dump at this location.,Open,30
+ISSUE-BC413B,23.037390912284646,72.59726446017112,Fallen Tree,9,Mock citizen report indicating a fallen tree at this location.,Open,22
+ISSUE-E65F92,23.04606953243951,72.62962627761783,Water Leak,4,Mock citizen report indicating a water leak at this location.,Open,18
+ISSUE-0C0679,22.977319957009502,72.5205374234369,Open Manhole,9,Mock citizen report indicating a open manhole at this location.,Open,2
+ISSUE-99B810,22.991582930492747,72.6336678522621,Broken Streetlight,5,Mock citizen report indicating a broken streetlight at this location.,Open,17
+ISSUE-964211,22.97281404149999,72.54785965652052,Pothole,5,Mock citizen report indicating a pothole at this location.,Open,33
+ISSUE-1A4479,23.036295447526776,72.57008863756887,Pothole,8,Mock citizen report indicating a pothole at this location.,Open,16
+ISSUE-BDAAA0,23.011178301263918,72.59985532246019,Pothole,4,Mock citizen report indicating a pothole at this location.,Open,38
+ISSUE-910555,23.07029355817518,72.59830490017363,Fallen Tree,10,Mock citizen report indicating a fallen tree at this location.,Open,7
+ISSUE-AD6EEE,23.019673212768446,72.63579985502722,Broken Streetlight,5,Mock citizen report indicating a broken streetlight at this location.,Resolved,15
+ISSUE-CD85CB,23.053198556164524,72.57971402701527,Garbage Dump,3,Mock citizen report indicating a garbage dump at this location.,Open,42
+ISSUE-86F178,23.004784242902208,72.5358690997164,Open Manhole,9,Mock citizen report indicating a open manhole at this location.,Open,19
+ISSUE-B4C50E,22.9772530928049,72.57362784932995,Open Manhole,7,Mock citizen report indicating a open manhole at this location.,Resolved,16
+ISSUE-D13D4A,23.03557188757115,72.58086612699864,Pothole,4,Mock citizen report indicating a pothole at this location.,Open,14
+ISSUE-A4B038,23.00681613850659,72.52156407782599,Broken Streetlight,5,Mock citizen report indicating a broken streetlight at this location.,Resolved,29
+ISSUE-138431,22.974257768248602,72.61667654664416,Garbage Dump,5,Mock citizen report indicating a garbage dump at this location.,Open,22
+ISSUE-26B328,23.025541434901893,72.56459199313217,Fallen Tree,8,Mock citizen report indicating a fallen tree at this location.,Open,34
+ISSUE-2949B2,22.978366081916274,72.55207359783122,Pothole,4,Mock citizen report indicating a pothole at this location.,Resolved,32
+ISSUE-5C5EDB,22.973716647585384,72.5536927152962,Fallen Tree,10,Mock citizen report indicating a fallen tree at this location.,Resolved,32
+ISSUE-8C47CA,22.98356381435656,72.52844020846317,Water Leak,4,Mock citizen report indicating a water leak at this location.,Resolved,34
+ISSUE-FD0937,23.041003131400995,72.54748520842607,Fallen Tree,8,Mock citizen report indicating a fallen tree at this location.,Open,22
+ISSUE-73D779,22.985829965244925,72.58124482593529,Open Manhole,7,Mock citizen report indicating a open manhole at this location.,Open,6
+ISSUE-A5B96D,23.0681629451511,72.57593433145013,Garbage Dump,2,Mock citizen report indicating a garbage dump at this location.,Open,3
+ISSUE-745D56,23.00778477116851,72.5804115493436,Water Leak,6,Mock citizen report indicating a water leak at this location.,Open,29

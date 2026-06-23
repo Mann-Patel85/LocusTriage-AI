@@ -41,5 +41,5 @@ for _ in range(NUM_RECORDS):
     
 # Create a Pandas DataFrame and export it
 df=pd.DataFrame(data)
-df.to_csv('historical_issues.csv', index=False)
+df.to_csv('data/historical_issues.csv', index=False)
 print(f"✅ Successfully generated 'historical_issues.csv' with {NUM_RECORDS} mock records for Ahmedabad!")

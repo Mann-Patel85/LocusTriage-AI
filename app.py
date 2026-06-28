@@ -70,7 +70,7 @@ with tab1:
                     os.remove(temp_path)
 
 # ==========================================
-# TAB 2: OFFICIAL DASHBOARD (Step 2 Analytics)
+# TAB 2: OFFICIAL DASHBOARD 
 # ==========================================
 with tab2:
     st.header("📊 City Analytics Dashboard")
@@ -84,7 +84,7 @@ with tab2:
         col1.metric("Total Issues Reported", len(df))
         
         # Calculate the average urgency score safely
-        if 'Urgency_Score' in df.columns: # <-- Capital U and S
+        if 'Urgency_Score' in df.columns:
             avg_urgency = round(df['Urgency_Score'].mean(), 1)
             col2.metric("Average Urgency Score", avg_urgency)
         
@@ -92,7 +92,7 @@ with tab2:
         
         # Create a Bar Chart for Categories
         st.subheader("Issues by Category")
-        if 'Category' in df.columns: # <-- Capital C
+        if 'Category' in df.columns:
             category_counts = df['Category'].value_counts()
             st.bar_chart(category_counts)
         
@@ -101,4 +101,5 @@ with tab2:
         st.dataframe(df, use_container_width=True)
         
     except FileNotFoundError:
+        # THIS is the line that got deleted!
         st.warning("No historical data found. Please check your data folder!")

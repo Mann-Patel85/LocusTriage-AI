@@ -9,6 +9,62 @@ from ai_engine import analyze_civic_issue
 
 # 1. Page Configuration
 st.set_page_config(page_title="LocusTriage AI", page_icon="🏙️", layout="centered")
+# --- CSS INJECTION ---
+st.markdown("""
+    <style>
+    /* Hide ONLY the Streamlit watermark footer */
+    footer {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
+# -----------------------------
+
+# --- USER SIDEBAR ---
+with st.sidebar:
+    st.title("👤 User Profile")
+    
+    # Initialize session states for login and role
+    if 'logged_in' not in st.session_state:
+        st.session_state['logged_in'] = False
+        st.session_state['role'] = None
+        
+    if not st.session_state['logged_in']:
+        st.subheader("Login")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        
+        if st.button("Sign In"):
+            if password == "admin123":
+                st.session_state['logged_in'] = True
+                st.session_state['role'] = "admin"
+                st.rerun()
+            elif password == "citizen123":
+                st.session_state['logged_in'] = True
+                st.session_state['role'] = "citizen"
+                st.rerun()
+            else:
+                st.error("Invalid password. Try admin123 or citizen123")
+    else:
+        # What they see depends on their role!
+        if st.session_state['role'] == "admin":
+            st.success("Welcome back, City Official!")
+            st.write("Role: **Administrator** 🛡️")
+            st.divider()
+            st.subheader("Admin Controls")
+            st.button("⚙️ System Settings")
+            st.button("📥 Export Full Database")
+        else:
+            st.success("Welcome back, Neighbor!")
+            st.write("Role: **Citizen** 🏙️")
+            st.divider()
+            st.subheader("My Activity")
+            st.button("📜 My Submitted Reports (2)")
+            st.button("🔔 Notifications")
+            
+        if st.button("Logout"):
+            st.session_state['logged_in'] = False
+            st.session_state['role'] = None
+            st.rerun()
+# --------------------
 
 # 2. Header Section
 st.title("🏙️ LocusTriage AI")
@@ -70,36 +126,41 @@ with tab1:
                     os.remove(temp_path)
 
 # ==========================================
-# TAB 2: OFFICIAL DASHBOARD 
+# TAB 2: OFFICIAL DASHBOARD (Step 2 Analytics)
 # ==========================================
 with tab2:
-    st.header("📊 City Analytics Dashboard")
-    
-    try:
-        # Load the database
-        df = pd.read_csv("data/historical_issues.csv")
+    if st.session_state.get('role') != "admin":
+        # The Bouncer
+        st.error("🔒 Access Denied")
+        st.warning("Administrator clearance is required to view live city analytics. Please log in using an official city dispatcher account.")
+    else:
+        st.header("📊 City Analytics Dashboard")
         
-        # Create metric cards at the top
-        col1, col2 = st.columns(2)
-        col1.metric("Total Issues Reported", len(df))
-        
-        # Calculate the average urgency score safely
-        if 'Urgency_Score' in df.columns:
-            avg_urgency = round(df['Urgency_Score'].mean(), 1)
-            col2.metric("Average Urgency Score", avg_urgency)
-        
-        st.divider()
-        
-        # Create a Bar Chart for Categories
-        st.subheader("Issues by Category")
-        if 'Category' in df.columns:
-            category_counts = df['Category'].value_counts()
-            st.bar_chart(category_counts)
-        
-        # Show the raw spreadsheet
-        st.subheader("Live Database")
-        st.dataframe(df, use_container_width=True)
-        
-    except FileNotFoundError:
-        # THIS is the line that got deleted!
-        st.warning("No historical data found. Please check your data folder!")
+        try:
+            # Load the database
+            df = pd.read_csv("data/historical_issues.csv")
+            
+            # Create metric cards at the top
+            col1, col2 = st.columns(2)
+            col1.metric("Total Issues Reported", len(df))
+            
+            # Calculate the average urgency score safely
+            if 'Urgency_Score' in df.columns:
+                avg_urgency = round(df['Urgency_Score'].mean(), 1)
+                col2.metric("Average Urgency Score", avg_urgency)
+            
+            st.divider()
+            
+            # Create a Bar Chart for Categories
+            st.subheader("Issues by Category")
+            if 'Category' in df.columns:
+                category_counts = df['Category'].value_counts()
+                st.bar_chart(category_counts)
+            
+            # Show the raw spreadsheet
+            st.subheader("Live Database")
+            st.dataframe(df, width="stretch")
+            
+        except FileNotFoundError:
+            # THIS is the line that got deleted!
+            st.warning("No historical data found. Please check your data folder!")

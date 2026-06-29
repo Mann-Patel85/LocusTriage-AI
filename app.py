@@ -1,3 +1,4 @@
+import pydeck as pdk
 import streamlit as st
 from PIL import Image
 import json
@@ -110,6 +111,10 @@ with tab1:
                     # Convert the single dictionary into a 1-row Pandas DataFrame
                     new_record = pd.DataFrame([report_data])
                     
+                    # --- 3A. ADD DEFAULT STATUS ---
+                    new_record['Status'] = 'Pending'
+                    # ------------------------------
+                    
                     # Append it to the bottom of the existing CSV file (mode='a')
                     # header=False prevents it from writing column names again
                     new_record.to_csv("data/historical_issues.csv", mode='a', header=False, index=False)
@@ -140,6 +145,20 @@ with tab2:
             # Load the database
             df = pd.read_csv("data/historical_issues.csv")
             
+            # --- 4. SMART DASHBOARD FILTERS ---
+            if 'Category' in df.columns:
+                all_categories = df['Category'].unique().tolist()
+                selected_categories = st.multiselect(
+                    "🔎 Filter by Category (Leave blank to view all):",
+                    options=all_categories,
+                    default=[]
+                )
+                
+                # If the Admin selected specific categories, filter the dataframe!
+                if selected_categories:
+                    df = df[df['Category'].isin(selected_categories)]
+            # ----------------------------------
+            
             # Create metric cards at the top
             col1, col2 = st.columns(2)
             col1.metric("Total Issues Reported", len(df))
@@ -151,6 +170,55 @@ with tab2:
             
             st.divider()
             
+            # --- 1. NEW INTERACTIVE MAP FEATURE (PYDECK UPGRADE) ---
+            st.subheader("🗺️ Live Issue Map")
+            
+            map_df = df.copy()
+            map_df.columns = [col.lower() for col in map_df.columns]
+            
+            # Standardize names to strictly 'lat' and 'lon' for PyDeck
+            if 'latitude' in map_df.columns:
+                map_df = map_df.rename(columns={'latitude': 'lat', 'longitude': 'lon'})
+                
+            # Convert text coordinates to decimals safely
+            for col in ['lat', 'lon']:
+                if col in map_df.columns:
+                    map_df[col] = pd.to_numeric(map_df[col], errors='coerce')
+                    
+            if 'lat' in map_df.columns and 'lon' in map_df.columns:
+                clean_map = map_df.dropna(subset=['lat', 'lon'])
+                
+                if not clean_map.empty:
+                    # 1. Set where the camera looks (calculating the center of your data)
+                    view_state = pdk.ViewState(
+                        latitude=clean_map['lat'].mean(),
+                        longitude=clean_map['lon'].mean(),
+                        zoom=11,
+                        pitch=45  # This gives it a premium 3D angled look
+                    )
+                    
+                    # 2. Design the data points
+                    layer = pdk.Layer(
+                        'ScatterplotLayer',
+                        data=clean_map,
+                        get_position='[lon, lat]',
+                        get_color='[226, 54, 54, 200]',  # Sleek alert red
+                        get_radius=150,
+                    )
+                    
+                  # 3. Render the map using the free Carto provider
+                    st.pydeck_chart(pdk.Deck(
+                        map_provider='carto',
+                        map_style='dark_matter', # <--- The actual Carto style name!
+                        initial_view_state=view_state,
+                        layers=[layer]
+                    )) 
+                else:
+                    st.info("Map data unavailable: No valid coordinates found.")
+            else:
+                st.info("Map data unavailable: No latitude/longitude columns found.")
+            # --------------------------------------
+            
             # Create a Bar Chart for Categories
             st.subheader("Issues by Category")
             if 'Category' in df.columns:
@@ -159,7 +227,48 @@ with tab2:
             
             # Show the raw spreadsheet
             st.subheader("Live Database")
-            st.dataframe(df, width="stretch")
+            
+            # --- 2. NEW DOWNLOAD REPORT FEATURE ---
+            # Convert the current DataFrame into a CSV string bytes format for downloading
+            csv_data = df.to_csv(index=False).encode('utf-8')
+            
+            st.download_button(
+                label="📥 Export Full Database (CSV)",
+                data=csv_data,
+                file_name="city_historical_issues_export.csv",
+                mime="text/csv",
+                key="download-csv"
+            )
+            # --------------------------------------
+            # --- 3B. LIVE STATUS TRACKER ---
+            st.subheader("Live Database Editor")
+            st.caption("Double-click a cell in the 'Status' column to update it.")
+            
+            # Safety check: If older records don't have a status yet, give them one
+            if 'Status' not in df.columns:
+                df['Status'] = 'Pending'
+                
+            # Create an editable grid with a dropdown specifically for the Status column
+            edited_df = st.data_editor(
+                df,
+                column_config={
+                    "Status": st.column_config.SelectboxColumn(
+                        "Issue Status",
+                        help="Update the repair status",
+                        options=["Pending", "In Progress", "Resolved"],
+                        required=True,
+                    )
+                },
+                width="stretch",
+                key="database_editor"
+            )
+            
+            # Button to lock in the changes
+            if st.button("💾 Save Changes to Database", type="primary"):
+                edited_df.to_csv("data/historical_issues.csv", index=False)
+                st.success("City database updated successfully!")
+                st.rerun()
+            # --------------------------------------
             
         except FileNotFoundError:
             # THIS is the line that got deleted!

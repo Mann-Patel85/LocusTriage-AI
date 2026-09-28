@@ -216,3 +216,23 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Environment & Secrets
+.env
+.env*.local
+*.env
+
+# Virtual Environment & Node
+.venv/
+venv/
+node_modules/
+.next/
+frontend/node_modules/
+frontend/.next/
+out/
+build/
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+

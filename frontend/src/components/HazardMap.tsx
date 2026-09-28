@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { CivicIssue } from '../types';
 import { api } from '../services/api';
 
@@ -19,6 +19,7 @@ export const HazardMap: React.FC<HazardMapProps> = ({
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [LeafletComponents, setLeafletComponents] = useState<any>(null);
+  const mapRef = useRef<any>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -40,21 +41,9 @@ export const HazardMap: React.FC<HazardMapProps> = ({
         CircleMarker: RL.CircleMarker,
         Popup: RL.Popup,
         Tooltip: RL.Tooltip,
-        useMap: RL.useMap,
       });
     });
   }, []);
-
-  if (!isMounted || !LeafletComponents) {
-    return (
-      <div className="w-full h-96 rounded-xl bg-orange-50/70 border border-orange-200 flex flex-col items-center justify-center text-stone-500 space-y-3">
-        <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm font-medium">Rendering India Geospatial Triage Map...</p>
-      </div>
-    );
-  }
-
-  const { L, MapContainer, TileLayer, CircleMarker, Popup, Tooltip, useMap } = LeafletComponents;
 
   // Filter valid issues located within India geographical bounding box
   const validIssues = issues.filter(
@@ -69,19 +58,30 @@ export const HazardMap: React.FC<HazardMapProps> = ({
       Number(i.longitude) <= 97.5
   );
 
-  // Auto-fit to Indian hazard points
-  function AutoFitBounds({ points }: { points: CivicIssue[] }) {
-    const map = useMap();
-    useEffect(() => {
-      if (points.length > 0) {
-        const bounds = L.latLngBounds(
-          points.map((p) => [Number(p.latitude), Number(p.longitude)] as [number, number])
+  // Auto-pan to fit all points whenever issues update
+  useEffect(() => {
+    if (mapRef.current && validIssues.length > 0 && LeafletComponents?.L) {
+      try {
+        const bounds = LeafletComponents.L.latLngBounds(
+          validIssues.map((p) => [Number(p.latitude), Number(p.longitude)])
         );
-        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+        mapRef.current.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+      } catch (e) {
+        // ignore if map not ready
       }
-    }, [points, map]);
-    return null;
+    }
+  }, [validIssues, LeafletComponents]);
+
+  if (!isMounted || !LeafletComponents) {
+    return (
+      <div className="w-full h-96 rounded-xl bg-orange-50/70 border border-orange-200 flex flex-col items-center justify-center text-stone-500 space-y-3">
+        <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+        <p className="text-sm font-medium">Rendering India Geospatial Triage Map...</p>
+      </div>
+    );
   }
+
+  const { MapContainer, TileLayer, CircleMarker, Popup, Tooltip } = LeafletComponents;
 
   const calculatedCenter: [number, number] = validIssues.length > 0
     ? [
@@ -105,7 +105,6 @@ export const HazardMap: React.FC<HazardMapProps> = ({
     }
   };
 
-  // Indian Map Bounds restriction
   const indiaBounds: [[number, number], [number, number]] = [
     [6.5, 68.0],
     [37.5, 97.5],
@@ -114,6 +113,7 @@ export const HazardMap: React.FC<HazardMapProps> = ({
   return (
     <div className="w-full h-[450px] lg:h-[550px] rounded-xl overflow-hidden border border-orange-200 shadow-xl relative">
       <MapContainer
+        ref={mapRef}
         center={calculatedCenter}
         zoom={zoom}
         minZoom={4}
@@ -127,8 +127,6 @@ export const HazardMap: React.FC<HazardMapProps> = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxZoom={19}
         />
-
-        {validIssues.length > 0 && <AutoFitBounds points={validIssues} />}
 
         {validIssues.map((issue) => (
           <CircleMarker

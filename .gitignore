@@ -236,3 +236,7 @@ build/
 uploads/*
 !uploads/.gitkeep
 
+# Project documentation & local info files
+PROJECT_INFO.txt
+
+

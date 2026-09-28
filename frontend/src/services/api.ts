@@ -5,7 +5,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 export const api = {
   async healthCheck(): Promise<boolean> {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/health`);
+      const res = await fetch(`${API_BASE_URL}/api/health`, { cache: 'no-store' });
       return res.ok;
     } catch {
       return false;
@@ -13,17 +13,24 @@ export const api = {
   },
 
   async uploadAndTriage(formData: FormData): Promise<CivicIssue> {
-    const res = await fetch(`${API_BASE_URL}/api/triage`, {
-      method: 'POST',
-      body: formData,
-    });
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/triage`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    if (!res.ok) {
-      const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.detail || 'Failed to triage image');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to triage image');
+      }
+
+      return await res.json();
+    } catch (err: any) {
+      if (err.message.includes('fetch')) {
+        throw new Error('Cannot connect to backend server at http://localhost:8000. Please ensure FastAPI is running.');
+      }
+      throw err;
     }
-
-    return res.json();
   },
 
   async getIssues(params?: {
@@ -33,66 +40,86 @@ export const api = {
     limit?: number;
     offset?: number;
   }): Promise<CivicIssue[]> {
-    const query = new URLSearchParams();
-    if (params?.category) query.append('category', params.category);
-    if (params?.status) query.append('status', params.status);
-    if (params?.min_urgency) query.append('min_urgency', params.min_urgency.toString());
-    if (params?.limit) query.append('limit', params.limit.toString());
-    if (params?.offset) query.append('offset', params.offset.toString());
+    try {
+      const query = new URLSearchParams();
+      if (params?.category) query.append('category', params.category);
+      if (params?.status) query.append('status', params.status);
+      if (params?.min_urgency) query.append('min_urgency', params.min_urgency.toString());
+      if (params?.limit) query.append('limit', params.limit.toString());
+      if (params?.offset) query.append('offset', params.offset.toString());
 
-    const res = await fetch(`${API_BASE_URL}/api/issues?${query.toString()}`, {
-      cache: 'no-store',
-    });
+      const res = await fetch(`${API_BASE_URL}/api/issues?${query.toString()}`, {
+        cache: 'no-store',
+      });
 
-    if (!res.ok) {
-      throw new Error('Failed to fetch issues');
+      if (!res.ok) {
+        return [];
+      }
+
+      return await res.json();
+    } catch (err) {
+      console.warn('Backend offline or unreachable, returning empty issues list:', err);
+      return [];
     }
-
-    return res.json();
   },
 
-  async updateIssueStatus(issueId: string, status: string): Promise<CivicIssue> {
-    const res = await fetch(`${API_BASE_URL}/api/issues/${issueId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ status }),
-    });
+  async updateIssueStatus(issueId: string, status: string): Promise<CivicIssue | null> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/issues/${issueId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      });
 
-    if (!res.ok) {
-      throw new Error('Failed to update issue');
+      if (!res.ok) {
+        throw new Error('Failed to update issue');
+      }
+
+      return await res.json();
+    } catch (err) {
+      console.error('Failed to update issue status:', err);
+      return null;
     }
-
-    return res.json();
   },
 
-  async upvoteIssue(issueId: string, newUpvotes: number): Promise<CivicIssue> {
-    const res = await fetch(`${API_BASE_URL}/api/issues/${issueId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ upvotes: newUpvotes }),
-    });
+  async upvoteIssue(issueId: string, newUpvotes: number): Promise<CivicIssue | null> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/issues/${issueId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ upvotes: newUpvotes }),
+      });
 
-    if (!res.ok) {
-      throw new Error('Failed to upvote issue');
+      if (!res.ok) {
+        throw new Error('Failed to upvote issue');
+      }
+
+      return await res.json();
+    } catch (err) {
+      console.error('Failed to upvote issue:', err);
+      return null;
     }
-
-    return res.json();
   },
 
-  async getStats(): Promise<DashboardStats> {
-    const res = await fetch(`${API_BASE_URL}/api/stats`, {
-      cache: 'no-store',
-    });
+  async getStats(): Promise<DashboardStats | null> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/stats`, {
+        cache: 'no-store',
+      });
 
-    if (!res.ok) {
-      throw new Error('Failed to fetch stats');
+      if (!res.ok) {
+        return null;
+      }
+
+      return await res.json();
+    } catch (err) {
+      console.warn('Backend stats unreachable:', err);
+      return null;
     }
-
-    return res.json();
   },
 
   getExportUrl(): string {

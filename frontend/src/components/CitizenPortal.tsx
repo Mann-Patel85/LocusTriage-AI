@@ -412,8 +412,17 @@ export const CitizenPortal: React.FC<CitizenPortalProps> = ({
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-orange-100/70 border border-orange-200 text-xs text-orange-900 font-medium">
-                ✅ Logged to Municipal Corporation queue with status <strong className="text-stone-900">Pending</strong>.
+              <div className="p-3.5 rounded-xl bg-orange-100/70 border border-orange-200 text-xs text-orange-900 font-medium flex items-center justify-between">
+                <span>✅ Logged to Municipal Corporation queue with status <strong className="text-stone-900">Pending</strong>.</span>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(triageResult.issue_id);
+                    alert(`Copied ${triageResult.issue_id} to clipboard!`);
+                  }}
+                  className="px-2.5 py-1 bg-white hover:bg-orange-50 border border-orange-300 text-orange-800 rounded text-[11px] font-bold shadow-2xs transition-colors shrink-0 ml-2"
+                >
+                  Copy ID
+                </button>
               </div>
             </div>
           ) : (
@@ -452,6 +461,34 @@ export const CitizenPortal: React.FC<CitizenPortalProps> = ({
               </div>
             </div>
           )}
+
+          {/* Emergency Indian Municipal Helplines Quick Card */}
+          <div className="glass-panel p-6 rounded-2xl border-rose-200 bg-rose-50/40 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold text-rose-900 uppercase tracking-wider flex items-center space-x-1.5">
+                <AlertOctagon className="w-3.5 h-3.5 text-rose-600" />
+                <span>Emergency Municipal Helplines (24x7)</span>
+              </h3>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="p-2 bg-white rounded-lg border border-rose-100">
+                <span className="text-[10px] text-stone-500 block">AMC (Ahmedabad)</span>
+                <strong className="text-rose-700 text-xs">📞 155303</strong>
+              </div>
+              <div className="p-2 bg-white rounded-lg border border-rose-100">
+                <span className="text-[10px] text-stone-500 block">BMC (Mumbai)</span>
+                <strong className="text-rose-700 text-xs">📞 1916</strong>
+              </div>
+              <div className="p-2 bg-white rounded-lg border border-rose-100">
+                <span className="text-[10px] text-stone-500 block">MCD (Delhi-NCR)</span>
+                <strong className="text-rose-700 text-xs">📞 155305</strong>
+              </div>
+              <div className="p-2 bg-white rounded-lg border border-rose-100">
+                <span className="text-[10px] text-stone-500 block">BBMP (Bengaluru)</span>
+                <strong className="text-rose-700 text-xs">📞 1533</strong>
+              </div>
+            </div>
+          </div>
 
           {/* Recent Community Feed */}
           <div className="glass-panel p-6 rounded-2xl space-y-4">
